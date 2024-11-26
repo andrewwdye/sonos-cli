@@ -13,7 +13,8 @@ impl Discover {
             Ok(devices) => {
                 if devices.len() > 0 {
                     devices.iter().for_each(|device| {
-                        println!("Found device: {}", device.name());
+                        println!("{:16}: {}", device.host().unwrap(), device.name());
+                        // dbg!(device);
                     });
                 } else {
                     println!("No devices found");

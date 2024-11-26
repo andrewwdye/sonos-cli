@@ -1,14 +1,12 @@
 use futures::{pin_mut, TryStreamExt};
 use log::trace;
-use rupnp::ssdp::URN;
 use std::time::Duration;
 use crate::sonos::device::Device;
 use crate::sonos::errors::Error;
-
-const SONOS_URN: URN = URN::device("schemas-upnp-org", "ZonePlayer", 1);
+use crate::sonos::upnp;
 
 pub async fn discover() -> Result<Vec<Device>, Error> {
-    let devices = rupnp::discover(&SONOS_URN.into(), Duration::from_secs(3))
+    let devices = rupnp::discover(&upnp::ZONE_PLAYER_URN.into(), Duration::from_secs(3))
         .await?;
     pin_mut!(devices);
     let mut sonos_devices = Vec::new();
