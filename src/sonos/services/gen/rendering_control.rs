@@ -1,4 +1,4 @@
 /// RenderingControl
 ///
 /// Volume related controls
-struct RenderingControlService {}
+pub struct RenderingControlService {}

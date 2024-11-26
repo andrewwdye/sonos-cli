@@ -1,4 +1,4 @@
 /// Queue
 ///
 /// Modify and browse queues
-struct QueueService {}
+pub struct QueueService {}

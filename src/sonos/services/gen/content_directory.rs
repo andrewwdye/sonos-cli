@@ -1,4 +1,4 @@
 /// ContentDirectory
 ///
 /// Browse for local content
-struct ContentDirectoryService {}
+pub struct ContentDirectoryService {}

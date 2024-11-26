@@ -1,34 +1,34 @@
 {
-    "$schema": "https://svrooij.io/sonos-api-docs/schema/template.json",
-    "name": "sonos-rs",
-    "slug": "rs",
-    "repository": "https://github.com/andrewwdye/sonos-cli",
-    "author": {
-      "name": "Andrew Dye",
-      "link": "https://github.com/andrewwdye"
+  "$schema": "https://svrooij.io/sonos-api-docs/schema/template.json",
+  "name": "sonos-rs",
+  "slug": "rs",
+  "repository": "https://github.com/andrewwdye/sonos-cli",
+  "author": {
+    "name": "Andrew Dye",
+    "link": "https://github.com/andrewwdye"
+  },
+  "files": [
+    {
+      "file": "service.hbs",
+      "outputFile": "{snakeService}.rs",
+      "usage":"service"
     },
-    "files": [
-      {
-        "file": "service.hbs",
-        "outputFile": "src/sonos/services/gen/{snService}.rs",
-        "usage":"service"
-      },
-      {
-        "file": "service.mod.hbs",
-        "outputFile": "src/sonos/services/gen/mod.rs",
-        "usage": "index"
-      }
-    ],
-    "dataTypes": {
-      "ui4": "number",
-      "i4": "number",
-      "ui2": "number",
-      "i2": "number",
-      "MetaData": "string",
-      "ZoneGroupState": "string"
-    },
-    "serviceData": {
-      
-    },
-    "license": "MIT"
-  }
+    {
+      "file": "service.mod.hbs",
+      "outputFile": "mod.rs",
+      "usage": "index"
+    }
+  ],
+  "dataTypes": {
+    "ui4": "number",
+    "i4": "number",
+    "ui2": "number",
+    "i2": "number",
+    "MetaData": "string",
+    "ZoneGroupState": "string"
+  },
+  "serviceData": {
+    
+  },
+  "license": "MIT"
+}

@@ -1,4 +1,4 @@
 /// AudioIn
 ///
 /// Control line in
-struct AudioInService {}
+pub struct AudioInService {}
