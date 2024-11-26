@@ -1,5 +1,5 @@
 use clap::Parser;
-use crate::sonos;
+use sonos_cli::sonos;
 
 #[derive(Parser)]
 pub struct Discover {

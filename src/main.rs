@@ -4,7 +4,6 @@ use std::process::ExitCode;
 use tokio;
 
 mod commands;
-mod sonos;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
