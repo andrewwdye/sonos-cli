@@ -1,3 +1,0 @@
-/// VirtualLineIn
-///
-pub struct VirtualLineInService {}

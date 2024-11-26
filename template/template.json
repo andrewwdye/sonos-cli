@@ -9,23 +9,35 @@
   },
   "files": [
     {
-      "file": "service.hbs",
-      "outputFile": "{snakeService}.rs",
+      "file": "mod.hbs",
+      "outputFile": "mod.rs",
+      "usage": "index"
+    },
+    {
+      "file": "errors.hbs",
+      "outputFile": "errors.rs",
+      "usage": "index"
+    },
+    {
+      "file": "services/service.hbs",
+      "outputFile": "services/{snakeService}.rs",
       "usage":"service"
     },
     {
-      "file": "service.mod.hbs",
-      "outputFile": "mod.rs",
+      "file": "services/mod.hbs",
+      "outputFile": "services/mod.rs",
       "usage": "index"
     }
   ],
   "dataTypes": {
-    "ui4": "number",
-    "i4": "number",
-    "ui2": "number",
-    "i2": "number",
-    "MetaData": "string",
-    "ZoneGroupState": "string"
+    "boolean": "bool",
+    "ui4": "u32",
+    "i4": "i32",
+    "ui2": "u16",
+    "i2": "i16",
+    "string": "String",
+    "MetaData": "String",
+    "ZoneGroupState": "String"
   },
   "serviceData": {
     

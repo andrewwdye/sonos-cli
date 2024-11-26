@@ -1,3 +1,3 @@
 gen:
-	rm -f src/sonos/services/gen/*
-	sonos-docs generate template src/sonos/services/gen
+	rm -rf src/sonos/gen/*
+	sonos-docs generate template src/sonos/gen
