@@ -18,6 +18,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Discover Sonos devices on the network
     Discover(commands::discover::Discover),
 }
 
