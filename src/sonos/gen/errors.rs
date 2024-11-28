@@ -8,4 +8,6 @@ pub enum Error {
     MissingField(String),
     #[error("error parsing field {0}")]
     ParseError(String),
+    #[error("service {0} not found")]
+    ServiceNotFound(String),
 }

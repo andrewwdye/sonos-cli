@@ -19,6 +19,9 @@ struct Cli {
 enum Commands {
     /// Discover Sonos devices on the network
     Discover(commands::discover::Discover),
+
+    /// Get the state of a Sonos speaker
+    Speaker(commands::speaker::Speaker),
 }
 
 #[tokio::main]
@@ -30,6 +33,9 @@ async fn main() -> ExitCode {
     match cli.command {
         Some(Commands::Discover(c)) => {
             c.discover().await;
+        }
+        Some(Commands::Speaker(s)) => {
+            s.state().await;
         }
         None => {
             println!("No command provided");

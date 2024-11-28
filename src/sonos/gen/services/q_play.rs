@@ -2,8 +2,10 @@
 
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
-use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use rupnp::ssdp::URN;
 use serde_xml_rs;
+use std::net::IpAddr;
+use crate::sonos::gen::errors::Error;
 
 /// Sonos QPlayService
 ///
@@ -16,13 +18,18 @@ pub struct QPlayService {
 
 impl QPlayService {
     /// Create a new QPlayService instance from an existing UPnP device.
-    pub async fn from_device(device: Device) -> Option<Self> {
-        let urn = "urn:schemas-tencent-com:service:QPlay:1".parse::<URN>().unwrap();
-        if let Some(s) = device.find_service(&urn) {
-            Some(Self{ service: s.clone(), url: device.url().clone() })
-        } else {
-            None
-        }
+    async fn from_device(device: Device) -> Result<Self, Error> {
+        let urn = "urn:schemas-upnp-org:service:urn:schemas-tencent-com:service:QPlay:1:1".parse::<URN>().unwrap();
+        let service = device.find_service(&urn)
+            .ok_or_else(|| Error::ServiceNotFound("QPlayService".to_string()))?;
+        Ok(Self{ service: service.clone(), url: device.url().clone() })
+    }
+
+    /// Create a new QPlayService instance from an IP address.
+    async fn from_ip(ip: IpAddr) -> Result<Self, Error> {
+        let url = Uri::from_str(format!("http://{ip}:1400/xml/device_description.xml").as_str()).unwrap();
+        let device = Device::from_url(url).await?;
+        Self::from_device(device).await
     }
 
     /// QPlayAuth
