@@ -53,14 +53,14 @@ impl {{serviceName}} {
     pub async fn {{snake name}}(
             &self,
             {{#each inputs}}
-            {{snake name}}: {{relatedStateVariable.dataType}}{{#unless @last}},{{/unless}}
+            {{#if (are_equal name 'Type')}}type_t{{else}}{{snake name}}{{/if}}: {{relatedStateVariable.dataType}}{{#unless @last}},{{/unless}}
             {{/each}}
         ) -> Result<{{#if outputs}}{{name}}Result{{else}}(){{/if}}, Error> {
         {{#if inputs}}
         // TODO: use xml helper
         let mut payload = String::new();
         {{#each inputs}}
-        payload.push_str(format!("<{{name}}>{}</{{name}}>", {{snake name}}).as_str());
+        payload.push_str(format!("<{{name}}>{}</{{name}}>", {{#if (are_equal name 'Type')}}type_t{{else}}{{snake name}}{{/if}}).as_str());
         {{/each}}
         {{else}}
         let payload = String::new();

@@ -179,12 +179,12 @@ impl ZoneGroupTopologyService {
     pub async fn submit_diagnostics(
             &self,
             include_controllers: bool,
-            type: String
+            type_t: String
         ) -> Result<SubmitDiagnosticsResult, Error> {
         // TODO: use xml helper
         let mut payload = String::new();
         payload.push_str(format!("<IncludeControllers>{}</IncludeControllers>", include_controllers).as_str());
-        payload.push_str(format!("<Type>{}</Type>", type).as_str());
+        payload.push_str(format!("<Type>{}</Type>", type_t).as_str());
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SubmitDiagnosticsResult {
