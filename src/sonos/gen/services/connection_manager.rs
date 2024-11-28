@@ -47,7 +47,7 @@ impl ConnectionManagerService {
     ///
     /// Outputs:
     /// * `rcs_id`
-    /// * `avtransport_id`
+    /// * `av_transport_id`
     /// * `protocol_info`
     /// * `peer_connection_manager`
     /// * `peer_connection_id`
@@ -65,7 +65,7 @@ impl ConnectionManagerService {
         Ok(GetCurrentConnectionInfoResult {
             rcs_id: response.get("RcsID").ok_or_else(|| Error::MissingField("RcsID".to_string()))?
                 .parse().map_err(|_| Error::ParseError("RcsID".to_string()))?,
-            avtransport_id: response.get("AVTransportID").ok_or_else(|| Error::MissingField("AVTransportID".to_string()))?
+            av_transport_id: response.get("AVTransportID").ok_or_else(|| Error::MissingField("AVTransportID".to_string()))?
                 .parse().map_err(|_| Error::ParseError("AVTransportID".to_string()))?,
             protocol_info: response.get("ProtocolInfo").ok_or_else(|| Error::MissingField("ProtocolInfo".to_string()))?
                 .parse().map_err(|_| Error::ParseError("ProtocolInfo".to_string()))?,
@@ -108,7 +108,7 @@ pub struct GetCurrentConnectionIDsResult {
 #[derive(Debug)]
 pub struct GetCurrentConnectionInfoResult {
     pub rcs_id: i32,
-    pub avtransport_id: i32,
+    pub av_transport_id: i32,
     pub protocol_info: String,
     pub peer_connection_manager: String,
     pub peer_connection_id: i32,

@@ -58,7 +58,7 @@ impl SystemPropertiesService {
     /// * `account_type`
     /// * `account_token`
     /// * `account_key`
-    /// * `oauth_device_id`
+    /// * `o_auth_device_id`
     /// * `authorization_code`
     /// * `redirect_uri`
     /// * `user_id_hash_code`
@@ -72,7 +72,7 @@ impl SystemPropertiesService {
             account_type: u32,
             account_token: String,
             account_key: String,
-            oauth_device_id: String,
+            o_auth_device_id: String,
             authorization_code: String,
             redirect_uri: String,
             user_id_hash_code: String,
@@ -83,7 +83,7 @@ impl SystemPropertiesService {
         payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
         payload.push_str(format!("<AccountToken>{}</AccountToken>", account_token).as_str());
         payload.push_str(format!("<AccountKey>{}</AccountKey>", account_key).as_str());
-        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", oauth_device_id).as_str());
+        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", o_auth_device_id).as_str());
         payload.push_str(format!("<AuthorizationCode>{}</AuthorizationCode>", authorization_code).as_str());
         payload.push_str(format!("<RedirectURI>{}</RedirectURI>", redirect_uri).as_str());
         payload.push_str(format!("<UserIdHashCode>{}</UserIdHashCode>", user_id_hash_code).as_str());
@@ -152,14 +152,14 @@ impl SystemPropertiesService {
     /// EnableRDM
     ///
     /// Parameters:
-    /// * `rdmvalue`
+    /// * `rdm_value`
     pub async fn enable_rdm(
             &self,
-            rdmvalue: bool
+            rdm_value: bool
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
-        payload.push_str(format!("<RDMValue>{}</RDMValue>", rdmvalue).as_str());
+        payload.push_str(format!("<RDMValue>{}</RDMValue>", rdm_value).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -167,7 +167,7 @@ impl SystemPropertiesService {
     /// GetRDM
     ///
     /// Outputs:
-    /// * `rdmvalue`
+    /// * `rdm_value`
     pub async fn get_rdm(
             &self,
         ) -> Result<GetRDMResult, Error> {
@@ -175,7 +175,7 @@ impl SystemPropertiesService {
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetRDMResult {
-            rdmvalue: response.get("RDMValue").ok_or_else(|| Error::MissingField("RDMValue".to_string()))?
+            rdm_value: response.get("RDMValue").ok_or_else(|| Error::MissingField("RDMValue".to_string()))?
                 .parse().map_err(|_| Error::ParseError("RDMValue".to_string()))?,
         })
     }
@@ -328,7 +328,7 @@ impl SystemPropertiesService {
     /// * `new_account_password`
     /// * `account_token`
     /// * `account_key`
-    /// * `oauth_device_id`
+    /// * `o_auth_device_id`
     ///
     /// Outputs:
     /// * `new_account_udn`
@@ -339,7 +339,7 @@ impl SystemPropertiesService {
             new_account_password: String,
             account_token: String,
             account_key: String,
-            oauth_device_id: String
+            o_auth_device_id: String
         ) -> Result<ReplaceAccountXResult, Error> {
         // TODO: use xml helper
         let mut payload = String::new();
@@ -348,7 +348,7 @@ impl SystemPropertiesService {
         payload.push_str(format!("<NewAccountPassword>{}</NewAccountPassword>", new_account_password).as_str());
         payload.push_str(format!("<AccountToken>{}</AccountToken>", account_token).as_str());
         payload.push_str(format!("<AccountKey>{}</AccountKey>", account_key).as_str());
-        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", oauth_device_id).as_str());
+        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", o_auth_device_id).as_str());
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ReplaceAccountXResult {
@@ -420,7 +420,7 @@ pub struct AddOAuthAccountXResult {
 
 #[derive(Debug)]
 pub struct GetRDMResult {
-    pub rdmvalue: bool,
+    pub rdm_value: bool,
 }
 
 #[derive(Debug)]

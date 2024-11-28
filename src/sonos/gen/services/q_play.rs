@@ -33,7 +33,7 @@ impl QPlayService {
     /// * `code`
     /// * `mid`
     /// * `did`
-    pub async fn qplay_auth(
+    pub async fn q_play_auth(
             &self,
             seed: String
         ) -> Result<QPlayAuthResult, Error> {

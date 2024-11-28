@@ -46,14 +46,14 @@ impl DevicePropertiesService {
     /// Note: Not all speakers support satellites or sub woofer. Satellites should be of same type (e.g. Play:1)
     ///
     /// Parameters:
-    /// * `htsat_chan_map_set` : example: `RINCON_000PPP1400:LF,RF;RINCON_000RRR1400:RR;RINCON_000SSS1400:LR;RINCON_000QQQ1400:SW`
+    /// * `ht_sat_chan_map_set` : example: `RINCON_000PPP1400:LF,RF;RINCON_000RRR1400:RR;RINCON_000SSS1400:LR;RINCON_000QQQ1400:SW`
     pub async fn add_htsatellite(
             &self,
-            htsat_chan_map_set: String
+            ht_sat_chan_map_set: String
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
-        payload.push_str(format!("<HTSatChanMapSet>{}</HTSatChanMapSet>", htsat_chan_map_set).as_str());
+        payload.push_str(format!("<HTSatChanMapSet>{}</HTSatChanMapSet>", ht_sat_chan_map_set).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -323,11 +323,11 @@ impl DevicePropertiesService {
     /// * `software_version`
     /// * `display_software_version`
     /// * `hardware_version`
-    /// * `ipaddress`
-    /// * `macaddress`
+    /// * `ip_address`
+    /// * `mac_address`
     /// * `copyright_info`
     /// * `extra_info`
-    /// * `htaudio_in` : SPDIF input, `0` not connected / `2` stereo / `7` Dolby 2.0 / `18` dolby 5.1 / `21` not listening / `22` silence
+    /// * `ht_audio_in` : SPDIF input, `0` not connected / `2` stereo / `7` Dolby 2.0 / `18` dolby 5.1 / `21` not listening / `22` silence
     /// * `flags`
     pub async fn get_zone_info(
             &self,
@@ -344,15 +344,15 @@ impl DevicePropertiesService {
                 .parse().map_err(|_| Error::ParseError("DisplaySoftwareVersion".to_string()))?,
             hardware_version: response.get("HardwareVersion").ok_or_else(|| Error::MissingField("HardwareVersion".to_string()))?
                 .parse().map_err(|_| Error::ParseError("HardwareVersion".to_string()))?,
-            ipaddress: response.get("IPAddress").ok_or_else(|| Error::MissingField("IPAddress".to_string()))?
+            ip_address: response.get("IPAddress").ok_or_else(|| Error::MissingField("IPAddress".to_string()))?
                 .parse().map_err(|_| Error::ParseError("IPAddress".to_string()))?,
-            macaddress: response.get("MACAddress").ok_or_else(|| Error::MissingField("MACAddress".to_string()))?
+            mac_address: response.get("MACAddress").ok_or_else(|| Error::MissingField("MACAddress".to_string()))?
                 .parse().map_err(|_| Error::ParseError("MACAddress".to_string()))?,
             copyright_info: response.get("CopyrightInfo").ok_or_else(|| Error::MissingField("CopyrightInfo".to_string()))?
                 .parse().map_err(|_| Error::ParseError("CopyrightInfo".to_string()))?,
             extra_info: response.get("ExtraInfo").ok_or_else(|| Error::MissingField("ExtraInfo".to_string()))?
                 .parse().map_err(|_| Error::ParseError("ExtraInfo".to_string()))?,
-            htaudio_in: response.get("HTAudioIn").ok_or_else(|| Error::MissingField("HTAudioIn".to_string()))?
+            ht_audio_in: response.get("HTAudioIn").ok_or_else(|| Error::MissingField("HTAudioIn".to_string()))?
                 .parse().map_err(|_| Error::ParseError("HTAudioIn".to_string()))?,
             flags: response.get("Flags").ok_or_else(|| Error::MissingField("Flags".to_string()))?
                 .parse().map_err(|_| Error::ParseError("Flags".to_string()))?,
@@ -653,12 +653,12 @@ pub struct GetZoneInfoResult {
     pub software_version: String,
     pub display_software_version: String,
     pub hardware_version: String,
-    pub ipaddress: String,
-    pub macaddress: String,
+    pub ip_address: String,
+    pub mac_address: String,
     pub copyright_info: String,
     pub extra_info: String,
     /// SPDIF input, `0` not connected / `2` stereo / `7` Dolby 2.0 / `18` dolby 5.1 / `21` not listening / `22` silence
-    pub htaudio_in: u32,
+    pub ht_audio_in: u32,
     pub flags: u32,
 }
 

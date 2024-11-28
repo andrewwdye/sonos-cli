@@ -56,19 +56,19 @@ impl RenderingControlService {
     ///
     /// Parameters:
     /// * `instance_id` : InstanceID should always be `0`
-    /// * `eqtype` : Allowed values `DialogLevel` (bool) / `MusicSurroundLevel` (-15/+15) /  `NightMode` (bool) / `SubGain` (-10/+10) / `SurroundEnable` (bool) / `SurroundLevel` (-15/+15) / `SurroundMode` (0 = ambient, 1 = full) / `HeightChannelLevel` (-10/+10)
+    /// * `eq_type` : Allowed values `DialogLevel` (bool) / `MusicSurroundLevel` (-15/+15) /  `NightMode` (bool) / `SubGain` (-10/+10) / `SurroundEnable` (bool) / `SurroundLevel` (-15/+15) / `SurroundMode` (0 = ambient, 1 = full) / `HeightChannelLevel` (-10/+10)
     ///
     /// Outputs:
     /// * `current_value` : Booleans return `1` / `0`, rest number as specified
     pub async fn get_eq(
             &self,
             instance_id: u32,
-            eqtype: String
+            eq_type: String
         ) -> Result<GetEQResult, Error> {
         // TODO: use xml helper
         let mut payload = String::new();
         payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eqtype).as_str());
+        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetEQResult {
@@ -399,16 +399,16 @@ impl RenderingControlService {
     ///
     /// Parameters:
     /// * `instance_id` : InstanceID should always be `0`
-    /// * `eqtype`
+    /// * `eq_type`
     pub async fn reset_ext_eq(
             &self,
             instance_id: u32,
-            eqtype: String
+            eq_type: String
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
         payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eqtype).as_str());
+        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -477,18 +477,18 @@ impl RenderingControlService {
     ///
     /// Parameters:
     /// * `instance_id` : InstanceID should always be `0`
-    /// * `eqtype` : Allowed values `DialogLevel` (bool) / `MusicSurroundLevel` (-15/+15) /  `NightMode` (bool) / `SubGain` (-10/+10) / `SurroundEnable` (bool) / `SurroundLevel` (-15/+15) / `SurroundMode` (0 = ambient, 1 = full) / `HeightChannelLevel` (-10/+10)
+    /// * `eq_type` : Allowed values `DialogLevel` (bool) / `MusicSurroundLevel` (-15/+15) /  `NightMode` (bool) / `SubGain` (-10/+10) / `SurroundEnable` (bool) / `SurroundLevel` (-15/+15) / `SurroundMode` (0 = ambient, 1 = full) / `HeightChannelLevel` (-10/+10)
     /// * `desired_value` : Booleans required `1` for true or `0` for false, rest number as specified
     pub async fn set_eq(
             &self,
             instance_id: u32,
-            eqtype: String,
+            eq_type: String,
             desired_value: i16
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
         payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eqtype).as_str());
+        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
         payload.push_str(format!("<DesiredValue>{}</DesiredValue>", desired_value).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())

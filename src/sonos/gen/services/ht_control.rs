@@ -58,7 +58,7 @@ impl HTControlService {
     /// GetLEDFeedbackState
     ///
     /// Outputs:
-    /// * `ledfeedback_state`
+    /// * `led_feedback_state`
     pub async fn get_ledfeedback_state(
             &self,
         ) -> Result<GetLEDFeedbackStateResult, Error> {
@@ -66,7 +66,7 @@ impl HTControlService {
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetLEDFeedbackStateResult {
-            ledfeedback_state: response.get("LEDFeedbackState").ok_or_else(|| Error::MissingField("LEDFeedbackState".to_string()))?
+            led_feedback_state: response.get("LEDFeedbackState").ok_or_else(|| Error::MissingField("LEDFeedbackState".to_string()))?
                 .parse().map_err(|_| Error::ParseError("LEDFeedbackState".to_string()))?,
         })
     }
@@ -105,16 +105,16 @@ impl HTControlService {
     /// LearnIRCode
     ///
     /// Parameters:
-    /// * `ircode`
+    /// * `ir_code`
     /// * `timeout`
     pub async fn learn_ircode(
             &self,
-            ircode: String,
+            ir_code: String,
             timeout: u32
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
-        payload.push_str(format!("<IRCode>{}</IRCode>", ircode).as_str());
+        payload.push_str(format!("<IRCode>{}</IRCode>", ir_code).as_str());
         payload.push_str(format!("<Timeout>{}</Timeout>", timeout).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
@@ -138,14 +138,14 @@ impl HTControlService {
     /// SetLEDFeedbackState
     ///
     /// Parameters:
-    /// * `ledfeedback_state`
+    /// * `led_feedback_state`
     pub async fn set_ledfeedback_state(
             &self,
-            ledfeedback_state: String
+            led_feedback_state: String
         ) -> Result<(), Error> {
         // TODO: use xml helper
         let mut payload = String::new();
-        payload.push_str(format!("<LEDFeedbackState>{}</LEDFeedbackState>", ledfeedback_state).as_str());
+        payload.push_str(format!("<LEDFeedbackState>{}</LEDFeedbackState>", led_feedback_state).as_str());
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -158,7 +158,7 @@ pub struct GetIRRepeaterStateResult {
 
 #[derive(Debug)]
 pub struct GetLEDFeedbackStateResult {
-    pub ledfeedback_state: String,
+    pub led_feedback_state: String,
 }
 
 #[derive(Debug)]

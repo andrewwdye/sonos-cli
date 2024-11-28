@@ -2,15 +2,15 @@
 
 pub mod alarm_clock;
 pub mod audio_in;
-pub mod avtransport;
+pub mod av_transport;
 pub mod connection_manager;
 pub mod content_directory;
 pub mod device_properties;
 pub mod group_management;
 pub mod group_rendering_control;
-pub mod htcontrol;
+pub mod ht_control;
 pub mod music_services;
-pub mod qplay;
+pub mod q_play;
 pub mod queue;
 pub mod rendering_control;
 pub mod system_properties;
