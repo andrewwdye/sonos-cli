@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos RenderingControlService
 ///
@@ -37,9 +38,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetBassResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetBassResult {
@@ -65,10 +66,10 @@ impl RenderingControlService {
             instance_id: u32,
             eq_type: String
         ) -> Result<GetEQResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&eq_type).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetEQResult {
@@ -88,9 +89,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetHeadphoneConnectedResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetHeadphoneConnectedResult {
@@ -114,10 +115,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<GetLoudnessResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetLoudnessResult {
@@ -139,10 +140,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<GetMuteResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetMuteResult {
@@ -162,9 +163,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetOutputFixedResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetOutputFixedResult {
@@ -185,9 +186,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetRoomCalibrationStatusResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetRoomCalibrationStatusResult {
@@ -209,9 +210,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetSupportsOutputFixedResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetSupportsOutputFixedResult {
@@ -233,9 +234,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetTrebleResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetTrebleResult {
@@ -259,10 +260,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<GetVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetVolumeResult {
@@ -284,10 +285,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<GetVolumeDBResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetVolumeDBResult {
@@ -310,10 +311,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<GetVolumeDBRangeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetVolumeDBRangeResult {
@@ -345,14 +346,14 @@ impl RenderingControlService {
             reset_volume_after: bool,
             program_uri: String
         ) -> Result<RampToVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<RampType>{}</RampType>", ramp_type).as_str());
-        payload.push_str(format!("<DesiredVolume>{}</DesiredVolume>", desired_volume).as_str());
-        payload.push_str(format!("<ResetVolumeAfter>{}</ResetVolumeAfter>", reset_volume_after).as_str());
-        payload.push_str(format!("<ProgramURI>{}</ProgramURI>", program_uri).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&ramp_type).unwrap(),
+            serde_xml_rs::to_string(&desired_volume).unwrap(),
+            serde_xml_rs::to_string(&reset_volume_after).unwrap(),
+            serde_xml_rs::to_string(&program_uri).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(RampToVolumeResult {
@@ -376,9 +377,9 @@ impl RenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<ResetBasicEQResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ResetBasicEQResult {
@@ -405,10 +406,10 @@ impl RenderingControlService {
             instance_id: u32,
             eq_type: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&eq_type).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -423,10 +424,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -443,10 +444,10 @@ impl RenderingControlService {
             instance_id: u32,
             desired_bass: i16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredBass>{}</DesiredBass>", desired_bass).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_bass).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -461,10 +462,10 @@ impl RenderingControlService {
             instance_id: u32,
             channel_map: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<ChannelMap>{}</ChannelMap>", channel_map).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel_map).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -485,11 +486,11 @@ impl RenderingControlService {
             eq_type: String,
             desired_value: i16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EQType>{}</EQType>", eq_type).as_str());
-        payload.push_str(format!("<DesiredValue>{}</DesiredValue>", desired_value).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&eq_type).unwrap(),
+            serde_xml_rs::to_string(&desired_value).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -508,11 +509,11 @@ impl RenderingControlService {
             channel: String,
             desired_loudness: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<DesiredLoudness>{}</DesiredLoudness>", desired_loudness).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&desired_loudness).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -529,11 +530,11 @@ impl RenderingControlService {
             channel: String,
             desired_mute: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<DesiredMute>{}</DesiredMute>", desired_mute).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&desired_mute).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -548,10 +549,10 @@ impl RenderingControlService {
             instance_id: u32,
             desired_fixed: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredFixed>{}</DesiredFixed>", desired_fixed).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_fixed).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -571,11 +572,11 @@ impl RenderingControlService {
             channel: String,
             adjustment: i32
         ) -> Result<SetRelativeVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<Adjustment>{}</Adjustment>", adjustment).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&adjustment).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SetRelativeVolumeResult {
@@ -594,10 +595,10 @@ impl RenderingControlService {
             instance_id: u32,
             room_calibration_enabled: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<RoomCalibrationEnabled>{}</RoomCalibrationEnabled>", room_calibration_enabled).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&room_calibration_enabled).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -616,12 +617,12 @@ impl RenderingControlService {
             coefficients: String,
             calibration_mode: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CalibrationID>{}</CalibrationID>", calibration_id).as_str());
-        payload.push_str(format!("<Coefficients>{}</Coefficients>", coefficients).as_str());
-        payload.push_str(format!("<CalibrationMode>{}</CalibrationMode>", calibration_mode).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&calibration_id).unwrap(),
+            serde_xml_rs::to_string(&coefficients).unwrap(),
+            serde_xml_rs::to_string(&calibration_mode).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -638,10 +639,10 @@ impl RenderingControlService {
             instance_id: u32,
             desired_treble: i16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredTreble>{}</DesiredTreble>", desired_treble).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_treble).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -658,11 +659,11 @@ impl RenderingControlService {
             channel: String,
             desired_volume: u16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<DesiredVolume>{}</DesiredVolume>", desired_volume).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&desired_volume).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -679,11 +680,11 @@ impl RenderingControlService {
             channel: String,
             desired_volume: i16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<DesiredVolume>{}</DesiredVolume>", desired_volume).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&desired_volume).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

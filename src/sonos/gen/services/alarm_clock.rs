@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos AlarmClockService
 ///
@@ -55,18 +56,18 @@ impl AlarmClockService {
             volume: u16,
             include_linked_zones: bool
         ) -> Result<CreateAlarmResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<StartLocalTime>{}</StartLocalTime>", start_local_time).as_str());
-        payload.push_str(format!("<Duration>{}</Duration>", duration).as_str());
-        payload.push_str(format!("<Recurrence>{}</Recurrence>", recurrence).as_str());
-        payload.push_str(format!("<Enabled>{}</Enabled>", enabled).as_str());
-        payload.push_str(format!("<RoomUUID>{}</RoomUUID>", room_uuid).as_str());
-        payload.push_str(format!("<ProgramURI>{}</ProgramURI>", program_uri).as_str());
-        payload.push_str(format!("<ProgramMetaData>{}</ProgramMetaData>", program_meta_data).as_str());
-        payload.push_str(format!("<PlayMode>{}</PlayMode>", play_mode).as_str());
-        payload.push_str(format!("<Volume>{}</Volume>", volume).as_str());
-        payload.push_str(format!("<IncludeLinkedZones>{}</IncludeLinkedZones>", include_linked_zones).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&start_local_time).unwrap(),
+            serde_xml_rs::to_string(&duration).unwrap(),
+            serde_xml_rs::to_string(&recurrence).unwrap(),
+            serde_xml_rs::to_string(&enabled).unwrap(),
+            serde_xml_rs::to_string(&room_uuid).unwrap(),
+            serde_xml_rs::to_string(&program_uri).unwrap(),
+            serde_xml_rs::to_string(&program_meta_data).unwrap(),
+            serde_xml_rs::to_string(&play_mode).unwrap(),
+            serde_xml_rs::to_string(&volume).unwrap(),
+            serde_xml_rs::to_string(&include_linked_zones).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(CreateAlarmResult {
@@ -85,9 +86,9 @@ impl AlarmClockService {
             &self,
             id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ID>{}</ID>", id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -138,9 +139,9 @@ impl AlarmClockService {
             &self,
             time_stamp: String
         ) -> Result<GetHouseholdTimeAtStampResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<TimeStamp>{}</TimeStamp>", time_stamp).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&time_stamp).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetHouseholdTimeAtStampResult {
@@ -242,9 +243,9 @@ impl AlarmClockService {
             &self,
             index: i32
         ) -> Result<GetTimeZoneRuleResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Index>{}</Index>", index).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&index).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetTimeZoneRuleResult {
@@ -284,9 +285,9 @@ impl AlarmClockService {
             &self,
             desired_daily_index_refresh_time: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredDailyIndexRefreshTime>{}</DesiredDailyIndexRefreshTime>", desired_daily_index_refresh_time).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_daily_index_refresh_time).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -301,10 +302,10 @@ impl AlarmClockService {
             desired_time_format: String,
             desired_date_format: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredTimeFormat>{}</DesiredTimeFormat>", desired_time_format).as_str());
-        payload.push_str(format!("<DesiredDateFormat>{}</DesiredDateFormat>", desired_date_format).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_time_format).unwrap(),
+            serde_xml_rs::to_string(&desired_date_format).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -319,10 +320,10 @@ impl AlarmClockService {
             desired_time: String,
             time_zone_for_desired_time: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredTime>{}</DesiredTime>", desired_time).as_str());
-        payload.push_str(format!("<TimeZoneForDesiredTime>{}</TimeZoneForDesiredTime>", time_zone_for_desired_time).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_time).unwrap(),
+            serde_xml_rs::to_string(&time_zone_for_desired_time).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -335,9 +336,9 @@ impl AlarmClockService {
             &self,
             desired_time_server: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredTimeServer>{}</DesiredTimeServer>", desired_time_server).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_time_server).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -352,10 +353,10 @@ impl AlarmClockService {
             index: i32,
             auto_adjust_dst: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Index>{}</Index>", index).as_str());
-        payload.push_str(format!("<AutoAdjustDst>{}</AutoAdjustDst>", auto_adjust_dst).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&index).unwrap(),
+            serde_xml_rs::to_string(&auto_adjust_dst).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -392,19 +393,19 @@ impl AlarmClockService {
             volume: u16,
             include_linked_zones: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ID>{}</ID>", id).as_str());
-        payload.push_str(format!("<StartLocalTime>{}</StartLocalTime>", start_local_time).as_str());
-        payload.push_str(format!("<Duration>{}</Duration>", duration).as_str());
-        payload.push_str(format!("<Recurrence>{}</Recurrence>", recurrence).as_str());
-        payload.push_str(format!("<Enabled>{}</Enabled>", enabled).as_str());
-        payload.push_str(format!("<RoomUUID>{}</RoomUUID>", room_uuid).as_str());
-        payload.push_str(format!("<ProgramURI>{}</ProgramURI>", program_uri).as_str());
-        payload.push_str(format!("<ProgramMetaData>{}</ProgramMetaData>", program_meta_data).as_str());
-        payload.push_str(format!("<PlayMode>{}</PlayMode>", play_mode).as_str());
-        payload.push_str(format!("<Volume>{}</Volume>", volume).as_str());
-        payload.push_str(format!("<IncludeLinkedZones>{}</IncludeLinkedZones>", include_linked_zones).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&id).unwrap(),
+            serde_xml_rs::to_string(&start_local_time).unwrap(),
+            serde_xml_rs::to_string(&duration).unwrap(),
+            serde_xml_rs::to_string(&recurrence).unwrap(),
+            serde_xml_rs::to_string(&enabled).unwrap(),
+            serde_xml_rs::to_string(&room_uuid).unwrap(),
+            serde_xml_rs::to_string(&program_uri).unwrap(),
+            serde_xml_rs::to_string(&program_meta_data).unwrap(),
+            serde_xml_rs::to_string(&play_mode).unwrap(),
+            serde_xml_rs::to_string(&volume).unwrap(),
+            serde_xml_rs::to_string(&include_linked_zones).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -469,4 +470,3 @@ pub struct ListAlarmsResult {
     pub current_alarm_list: String,
     pub current_alarm_list_version: String,
 }
-

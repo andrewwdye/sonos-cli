@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos QueueService
 ///
@@ -52,16 +53,16 @@ impl QueueService {
             number_of_uris: u32,
             enqueued_uris_and_meta_data: String
         ) -> Result<AddMultipleURIsResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<ContainerURI>{}</ContainerURI>", container_uri).as_str());
-        payload.push_str(format!("<ContainerMetaData>{}</ContainerMetaData>", container_meta_data).as_str());
-        payload.push_str(format!("<DesiredFirstTrackNumberEnqueued>{}</DesiredFirstTrackNumberEnqueued>", desired_first_track_number_enqueued).as_str());
-        payload.push_str(format!("<EnqueueAsNext>{}</EnqueueAsNext>", enqueue_as_next).as_str());
-        payload.push_str(format!("<NumberOfURIs>{}</NumberOfURIs>", number_of_uris).as_str());
-        payload.push_str(format!("<EnqueuedURIsAndMetaData>{}</EnqueuedURIsAndMetaData>", enqueued_uris_and_meta_data).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&container_uri).unwrap(),
+            serde_xml_rs::to_string(&container_meta_data).unwrap(),
+            serde_xml_rs::to_string(&desired_first_track_number_enqueued).unwrap(),
+            serde_xml_rs::to_string(&enqueue_as_next).unwrap(),
+            serde_xml_rs::to_string(&number_of_uris).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uris_and_meta_data).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddMultipleURIsResult {
@@ -100,14 +101,14 @@ impl QueueService {
             desired_first_track_number_enqueued: u32,
             enqueue_as_next: bool
         ) -> Result<AddURIResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<EnqueuedURI>{}</EnqueuedURI>", enqueued_uri).as_str());
-        payload.push_str(format!("<EnqueuedURIMetaData>{}</EnqueuedURIMetaData>", enqueued_urimeta_data).as_str());
-        payload.push_str(format!("<DesiredFirstTrackNumberEnqueued>{}</DesiredFirstTrackNumberEnqueued>", desired_first_track_number_enqueued).as_str());
-        payload.push_str(format!("<EnqueueAsNext>{}</EnqueueAsNext>", enqueue_as_next).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uri).unwrap(),
+            serde_xml_rs::to_string(&enqueued_urimeta_data).unwrap(),
+            serde_xml_rs::to_string(&desired_first_track_number_enqueued).unwrap(),
+            serde_xml_rs::to_string(&enqueue_as_next).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddURIResult {
@@ -134,9 +135,9 @@ impl QueueService {
             &self,
             queue_owner_id: String
         ) -> Result<AttachQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueOwnerID>{}</QueueOwnerID>", queue_owner_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_owner_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AttachQueueResult {
@@ -174,11 +175,11 @@ impl QueueService {
             starting_index: u32,
             requested_count: u32
         ) -> Result<BrowseResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<RequestedCount>{}</RequestedCount>", requested_count).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&requested_count).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(BrowseResult {
@@ -208,11 +209,11 @@ impl QueueService {
             queue_owner_context: String,
             queue_policy: String
         ) -> Result<CreateQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueOwnerID>{}</QueueOwnerID>", queue_owner_id).as_str());
-        payload.push_str(format!("<QueueOwnerContext>{}</QueueOwnerContext>", queue_owner_context).as_str());
-        payload.push_str(format!("<QueuePolicy>{}</QueuePolicy>", queue_policy).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_owner_id).unwrap(),
+            serde_xml_rs::to_string(&queue_owner_context).unwrap(),
+            serde_xml_rs::to_string(&queue_policy).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(CreateQueueResult {
@@ -234,10 +235,10 @@ impl QueueService {
             queue_id: u32,
             update_id: u32
         ) -> Result<RemoveAllTracksResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(RemoveAllTracksResult {
@@ -263,12 +264,12 @@ impl QueueService {
             starting_index: u32,
             number_of_tracks: u32
         ) -> Result<RemoveTrackRangeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<NumberOfTracks>{}</NumberOfTracks>", number_of_tracks).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&number_of_tracks).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(RemoveTrackRangeResult {
@@ -296,13 +297,13 @@ impl QueueService {
             insert_before: u32,
             update_id: u32
         ) -> Result<ReorderTracksResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<NumberOfTracks>{}</NumberOfTracks>", number_of_tracks).as_str());
-        payload.push_str(format!("<InsertBefore>{}</InsertBefore>", insert_before).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&number_of_tracks).unwrap(),
+            serde_xml_rs::to_string(&insert_before).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ReorderTracksResult {
@@ -337,16 +338,16 @@ impl QueueService {
             number_of_uris: u32,
             enqueued_uris_and_meta_data: String
         ) -> Result<ReplaceAllTracksResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<ContainerURI>{}</ContainerURI>", container_uri).as_str());
-        payload.push_str(format!("<ContainerMetaData>{}</ContainerMetaData>", container_meta_data).as_str());
-        payload.push_str(format!("<CurrentTrackIndex>{}</CurrentTrackIndex>", current_track_index).as_str());
-        payload.push_str(format!("<NewCurrentTrackIndices>{}</NewCurrentTrackIndices>", new_current_track_indices).as_str());
-        payload.push_str(format!("<NumberOfURIs>{}</NumberOfURIs>", number_of_uris).as_str());
-        payload.push_str(format!("<EnqueuedURIsAndMetaData>{}</EnqueuedURIsAndMetaData>", enqueued_uris_and_meta_data).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&container_uri).unwrap(),
+            serde_xml_rs::to_string(&container_meta_data).unwrap(),
+            serde_xml_rs::to_string(&current_track_index).unwrap(),
+            serde_xml_rs::to_string(&new_current_track_indices).unwrap(),
+            serde_xml_rs::to_string(&number_of_uris).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uris_and_meta_data).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ReplaceAllTracksResult {
@@ -372,11 +373,11 @@ impl QueueService {
             title: String,
             object_id: String
         ) -> Result<SaveAsSonosPlaylistResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<QueueID>{}</QueueID>", queue_id).as_str());
-        payload.push_str(format!("<Title>{}</Title>", title).as_str());
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&queue_id).unwrap(),
+            serde_xml_rs::to_string(&title).unwrap(),
+            serde_xml_rs::to_string(&object_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SaveAsSonosPlaylistResult {

@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos ZoneGroupTopologyService
 ///
@@ -36,11 +37,11 @@ impl ZoneGroupTopologyService {
             flags: u32,
             extra_options: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<UpdateURL>{}</UpdateURL>", update_url).as_str());
-        payload.push_str(format!("<Flags>{}</Flags>", flags).as_str());
-        payload.push_str(format!("<ExtraOptions>{}</ExtraOptions>", extra_options).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&update_url).unwrap(),
+            serde_xml_rs::to_string(&flags).unwrap(),
+            serde_xml_rs::to_string(&extra_options).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -60,11 +61,11 @@ impl ZoneGroupTopologyService {
             cached_only: bool,
             version: String
         ) -> Result<CheckForUpdateResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<UpdateType>{}</UpdateType>", update_type).as_str());
-        payload.push_str(format!("<CachedOnly>{}</CachedOnly>", cached_only).as_str());
-        payload.push_str(format!("<Version>{}</Version>", version).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&update_type).unwrap(),
+            serde_xml_rs::to_string(&cached_only).unwrap(),
+            serde_xml_rs::to_string(&version).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(CheckForUpdateResult {
@@ -132,11 +133,11 @@ impl ZoneGroupTopologyService {
             mobile_device_udn: String,
             mobile_ipand_port: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<MobileDeviceName>{}</MobileDeviceName>", mobile_device_name).as_str());
-        payload.push_str(format!("<MobileDeviceUDN>{}</MobileDeviceUDN>", mobile_device_udn).as_str());
-        payload.push_str(format!("<MobileIPAndPort>{}</MobileIPAndPort>", mobile_ipand_port).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&mobile_device_name).unwrap(),
+            serde_xml_rs::to_string(&mobile_device_udn).unwrap(),
+            serde_xml_rs::to_string(&mobile_ipand_port).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -160,10 +161,10 @@ impl ZoneGroupTopologyService {
             device_uuid: String,
             desired_action: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DeviceUUID>{}</DeviceUUID>", device_uuid).as_str());
-        payload.push_str(format!("<DesiredAction>{}</DesiredAction>", desired_action).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&device_uuid).unwrap(),
+            serde_xml_rs::to_string(&desired_action).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -181,10 +182,10 @@ impl ZoneGroupTopologyService {
             include_controllers: bool,
             type_t: String
         ) -> Result<SubmitDiagnosticsResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<IncludeControllers>{}</IncludeControllers>", include_controllers).as_str());
-        payload.push_str(format!("<Type>{}</Type>", type_t).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&include_controllers).unwrap(),
+            serde_xml_rs::to_string(&type_t).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SubmitDiagnosticsResult {

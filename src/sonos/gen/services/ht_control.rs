@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos HTControlService
 ///
@@ -32,9 +33,9 @@ impl HTControlService {
             &self,
             name: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Name>{}</Name>", name).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&name).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -79,9 +80,9 @@ impl HTControlService {
             &self,
             timeout: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Timeout>{}</Timeout>", timeout).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&timeout).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -112,10 +113,10 @@ impl HTControlService {
             ir_code: String,
             timeout: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<IRCode>{}</IRCode>", ir_code).as_str());
-        payload.push_str(format!("<Timeout>{}</Timeout>", timeout).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&ir_code).unwrap(),
+            serde_xml_rs::to_string(&timeout).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -128,9 +129,9 @@ impl HTControlService {
             &self,
             desired_irrepeater_state: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredIRRepeaterState>{}</DesiredIRRepeaterState>", desired_irrepeater_state).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_irrepeater_state).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -143,9 +144,9 @@ impl HTControlService {
             &self,
             led_feedback_state: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<LEDFeedbackState>{}</LEDFeedbackState>", led_feedback_state).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&led_feedback_state).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

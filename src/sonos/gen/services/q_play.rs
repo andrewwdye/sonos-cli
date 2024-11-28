@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos QPlayService
 ///
@@ -37,9 +38,9 @@ impl QPlayService {
             &self,
             seed: String
         ) -> Result<QPlayAuthResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Seed>{}</Seed>", seed).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&seed).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(QPlayAuthResult {

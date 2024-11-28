@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos DevicePropertiesService
 ///
@@ -32,9 +33,9 @@ impl DevicePropertiesService {
             &self,
             channel_map_set: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ChannelMapSet>{}</ChannelMapSet>", channel_map_set).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&channel_map_set).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -51,9 +52,9 @@ impl DevicePropertiesService {
             &self,
             ht_sat_chan_map_set: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<HTSatChanMapSet>{}</HTSatChanMapSet>", ht_sat_chan_map_set).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&ht_sat_chan_map_set).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -70,9 +71,9 @@ impl DevicePropertiesService {
             &self,
             channel_map_set: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ChannelMapSet>{}</ChannelMapSet>", channel_map_set).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&channel_map_set).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -90,10 +91,10 @@ impl DevicePropertiesService {
             mode: String,
             options: String
         ) -> Result<EnterConfigModeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Mode>{}</Mode>", mode).as_str());
-        payload.push_str(format!("<Options>{}</Options>", options).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&mode).unwrap(),
+            serde_xml_rs::to_string(&options).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(EnterConfigModeResult {
@@ -110,9 +111,9 @@ impl DevicePropertiesService {
             &self,
             options: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Options>{}</Options>", options).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&options).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -128,9 +129,9 @@ impl DevicePropertiesService {
             &self,
             source: String
         ) -> Result<GetAutoplayLinkedZonesResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetAutoplayLinkedZonesResult {
@@ -150,9 +151,9 @@ impl DevicePropertiesService {
             &self,
             source: String
         ) -> Result<GetAutoplayRoomUUIDResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetAutoplayRoomUUIDResult {
@@ -172,9 +173,9 @@ impl DevicePropertiesService {
             &self,
             source: String
         ) -> Result<GetAutoplayVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetAutoplayVolumeResult {
@@ -278,9 +279,9 @@ impl DevicePropertiesService {
             &self,
             source: String
         ) -> Result<GetUseAutoplayVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetUseAutoplayVolumeResult {
@@ -369,10 +370,10 @@ impl DevicePropertiesService {
             channel_map_set: String,
             keep_grouped: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ChannelMapSet>{}</ChannelMapSet>", channel_map_set).as_str());
-        payload.push_str(format!("<KeepGrouped>{}</KeepGrouped>", keep_grouped).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&channel_map_set).unwrap(),
+            serde_xml_rs::to_string(&keep_grouped).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -389,9 +390,9 @@ impl DevicePropertiesService {
             &self,
             sat_room_uuid: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<SatRoomUUID>{}</SatRoomUUID>", sat_room_uuid).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&sat_room_uuid).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -411,11 +412,11 @@ impl DevicePropertiesService {
             duration_milliseconds: u32,
             chirp_if_playing_swappable_audio: bool
         ) -> Result<RoomDetectionStartChirpingResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Channel>{}</Channel>", channel).as_str());
-        payload.push_str(format!("<DurationMilliseconds>{}</DurationMilliseconds>", duration_milliseconds).as_str());
-        payload.push_str(format!("<ChirpIfPlayingSwappableAudio>{}</ChirpIfPlayingSwappableAudio>", chirp_if_playing_swappable_audio).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&channel).unwrap(),
+            serde_xml_rs::to_string(&duration_milliseconds).unwrap(),
+            serde_xml_rs::to_string(&chirp_if_playing_swappable_audio).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(RoomDetectionStartChirpingResult {
@@ -432,9 +433,9 @@ impl DevicePropertiesService {
             &self,
             play_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<PlayId>{}</PlayId>", play_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&play_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -451,9 +452,9 @@ impl DevicePropertiesService {
             &self,
             channel_map_set: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ChannelMapSet>{}</ChannelMapSet>", channel_map_set).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&channel_map_set).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -468,10 +469,10 @@ impl DevicePropertiesService {
             include_linked_zones: bool,
             source: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<IncludeLinkedZones>{}</IncludeLinkedZones>", include_linked_zones).as_str());
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&include_linked_zones).unwrap(),
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -486,10 +487,10 @@ impl DevicePropertiesService {
             room_uuid: String,
             source: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<RoomUUID>{}</RoomUUID>", room_uuid).as_str());
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&room_uuid).unwrap(),
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -504,10 +505,10 @@ impl DevicePropertiesService {
             volume: u16,
             source: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Volume>{}</Volume>", volume).as_str());
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&volume).unwrap(),
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -522,9 +523,9 @@ impl DevicePropertiesService {
             &self,
             desired_button_lock_state: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredButtonLockState>{}</DesiredButtonLockState>", desired_button_lock_state).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_button_lock_state).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -539,9 +540,9 @@ impl DevicePropertiesService {
             &self,
             desired_ledstate: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredLEDState>{}</DesiredLEDState>", desired_ledstate).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_ledstate).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -556,10 +557,10 @@ impl DevicePropertiesService {
             use_volume: bool,
             source: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<UseVolume>{}</UseVolume>", use_volume).as_str());
-        payload.push_str(format!("<Source>{}</Source>", source).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&use_volume).unwrap(),
+            serde_xml_rs::to_string(&source).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -578,12 +579,12 @@ impl DevicePropertiesService {
             desired_configuration: String,
             desired_target_room_name: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredZoneName>{}</DesiredZoneName>", desired_zone_name).as_str());
-        payload.push_str(format!("<DesiredIcon>{}</DesiredIcon>", desired_icon).as_str());
-        payload.push_str(format!("<DesiredConfiguration>{}</DesiredConfiguration>", desired_configuration).as_str());
-        payload.push_str(format!("<DesiredTargetRoomName>{}</DesiredTargetRoomName>", desired_target_room_name).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_zone_name).unwrap(),
+            serde_xml_rs::to_string(&desired_icon).unwrap(),
+            serde_xml_rs::to_string(&desired_configuration).unwrap(),
+            serde_xml_rs::to_string(&desired_target_room_name).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

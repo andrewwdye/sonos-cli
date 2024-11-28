@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos GroupRenderingControlService
 ///
@@ -39,9 +40,9 @@ impl GroupRenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetGroupMuteResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetGroupMuteResult {
@@ -65,9 +66,9 @@ impl GroupRenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<GetGroupVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetGroupVolumeResult {
@@ -90,10 +91,10 @@ impl GroupRenderingControlService {
             instance_id: u32,
             desired_mute: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredMute>{}</DesiredMute>", desired_mute).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_mute).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -112,10 +113,10 @@ impl GroupRenderingControlService {
             instance_id: u32,
             desired_volume: u16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredVolume>{}</DesiredVolume>", desired_volume).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_volume).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -137,10 +138,10 @@ impl GroupRenderingControlService {
             instance_id: u32,
             adjustment: i32
         ) -> Result<SetRelativeGroupVolumeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Adjustment>{}</Adjustment>", adjustment).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&adjustment).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SetRelativeGroupVolumeResult {
@@ -161,9 +162,9 @@ impl GroupRenderingControlService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

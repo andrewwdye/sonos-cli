@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos SystemPropertiesService
 ///
@@ -39,11 +40,11 @@ impl SystemPropertiesService {
             account_id: String,
             account_password: String
         ) -> Result<AddAccountXResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountID>{}</AccountID>", account_id).as_str());
-        payload.push_str(format!("<AccountPassword>{}</AccountPassword>", account_password).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_id).unwrap(),
+            serde_xml_rs::to_string(&account_password).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddAccountXResult {
@@ -78,16 +79,16 @@ impl SystemPropertiesService {
             user_id_hash_code: String,
             account_tier: u32
         ) -> Result<AddOAuthAccountXResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountToken>{}</AccountToken>", account_token).as_str());
-        payload.push_str(format!("<AccountKey>{}</AccountKey>", account_key).as_str());
-        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", o_auth_device_id).as_str());
-        payload.push_str(format!("<AuthorizationCode>{}</AuthorizationCode>", authorization_code).as_str());
-        payload.push_str(format!("<RedirectURI>{}</RedirectURI>", redirect_uri).as_str());
-        payload.push_str(format!("<UserIdHashCode>{}</UserIdHashCode>", user_id_hash_code).as_str());
-        payload.push_str(format!("<AccountTier>{}</AccountTier>", account_tier).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_token).unwrap(),
+            serde_xml_rs::to_string(&account_key).unwrap(),
+            serde_xml_rs::to_string(&o_auth_device_id).unwrap(),
+            serde_xml_rs::to_string(&authorization_code).unwrap(),
+            serde_xml_rs::to_string(&redirect_uri).unwrap(),
+            serde_xml_rs::to_string(&user_id_hash_code).unwrap(),
+            serde_xml_rs::to_string(&account_tier).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddOAuthAccountXResult {
@@ -119,11 +120,11 @@ impl SystemPropertiesService {
             account_id: String,
             new_account_md: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountID>{}</AccountID>", account_id).as_str());
-        payload.push_str(format!("<NewAccountMd>{}</NewAccountMd>", new_account_md).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_id).unwrap(),
+            serde_xml_rs::to_string(&new_account_md).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -140,11 +141,11 @@ impl SystemPropertiesService {
             account_id: String,
             new_account_password: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountID>{}</AccountID>", account_id).as_str());
-        payload.push_str(format!("<NewAccountPassword>{}</NewAccountPassword>", new_account_password).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_id).unwrap(),
+            serde_xml_rs::to_string(&new_account_password).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -157,9 +158,9 @@ impl SystemPropertiesService {
             &self,
             rdm_value: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<RDMValue>{}</RDMValue>", rdm_value).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&rdm_value).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -195,9 +196,9 @@ impl SystemPropertiesService {
             &self,
             variable_name: String
         ) -> Result<GetStringResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<VariableName>{}</VariableName>", variable_name).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&variable_name).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetStringResult {
@@ -217,9 +218,9 @@ impl SystemPropertiesService {
             &self,
             account_type: u32
         ) -> Result<GetWebCodeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetWebCodeResult {
@@ -244,11 +245,11 @@ impl SystemPropertiesService {
             account_id: String,
             account_password: String
         ) -> Result<ProvisionCredentialedTrialAccountXResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountID>{}</AccountID>", account_id).as_str());
-        payload.push_str(format!("<AccountPassword>{}</AccountPassword>", account_password).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_id).unwrap(),
+            serde_xml_rs::to_string(&account_password).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ProvisionCredentialedTrialAccountXResult {
@@ -273,12 +274,12 @@ impl SystemPropertiesService {
             account_token: String,
             account_key: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountUID>{}</AccountUID>", account_uid).as_str());
-        payload.push_str(format!("<AccountToken>{}</AccountToken>", account_token).as_str());
-        payload.push_str(format!("<AccountKey>{}</AccountKey>", account_key).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_uid).unwrap(),
+            serde_xml_rs::to_string(&account_token).unwrap(),
+            serde_xml_rs::to_string(&account_key).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -295,9 +296,9 @@ impl SystemPropertiesService {
             &self,
             variable_name: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<VariableName>{}</VariableName>", variable_name).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&variable_name).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -312,10 +313,10 @@ impl SystemPropertiesService {
             account_type: u32,
             account_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountType>{}</AccountType>", account_type).as_str());
-        payload.push_str(format!("<AccountID>{}</AccountID>", account_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_type).unwrap(),
+            serde_xml_rs::to_string(&account_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -341,14 +342,14 @@ impl SystemPropertiesService {
             account_key: String,
             o_auth_device_id: String
         ) -> Result<ReplaceAccountXResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountUDN>{}</AccountUDN>", account_udn).as_str());
-        payload.push_str(format!("<NewAccountID>{}</NewAccountID>", new_account_id).as_str());
-        payload.push_str(format!("<NewAccountPassword>{}</NewAccountPassword>", new_account_password).as_str());
-        payload.push_str(format!("<AccountToken>{}</AccountToken>", account_token).as_str());
-        payload.push_str(format!("<AccountKey>{}</AccountKey>", account_key).as_str());
-        payload.push_str(format!("<OAuthDeviceID>{}</OAuthDeviceID>", o_auth_device_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_udn).unwrap(),
+            serde_xml_rs::to_string(&new_account_id).unwrap(),
+            serde_xml_rs::to_string(&new_account_password).unwrap(),
+            serde_xml_rs::to_string(&account_token).unwrap(),
+            serde_xml_rs::to_string(&account_key).unwrap(),
+            serde_xml_rs::to_string(&o_auth_device_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ReplaceAccountXResult {
@@ -376,10 +377,10 @@ impl SystemPropertiesService {
             account_udn: String,
             account_nickname: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AccountUDN>{}</AccountUDN>", account_udn).as_str());
-        payload.push_str(format!("<AccountNickname>{}</AccountNickname>", account_nickname).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&account_udn).unwrap(),
+            serde_xml_rs::to_string(&account_nickname).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -398,10 +399,10 @@ impl SystemPropertiesService {
             variable_name: String,
             string_value: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<VariableName>{}</VariableName>", variable_name).as_str());
-        payload.push_str(format!("<StringValue>{}</StringValue>", string_value).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&variable_name).unwrap(),
+            serde_xml_rs::to_string(&string_value).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos AVTransportService
 ///
@@ -54,17 +55,17 @@ impl AVTransportService {
             desired_first_track_number_enqueued: u32,
             enqueue_as_next: bool
         ) -> Result<AddMultipleURIsToQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<NumberOfURIs>{}</NumberOfURIs>", number_of_uris).as_str());
-        payload.push_str(format!("<EnqueuedURIs>{}</EnqueuedURIs>", enqueued_uris).as_str());
-        payload.push_str(format!("<EnqueuedURIsMetaData>{}</EnqueuedURIsMetaData>", enqueued_uris_meta_data).as_str());
-        payload.push_str(format!("<ContainerURI>{}</ContainerURI>", container_uri).as_str());
-        payload.push_str(format!("<ContainerMetaData>{}</ContainerMetaData>", container_meta_data).as_str());
-        payload.push_str(format!("<DesiredFirstTrackNumberEnqueued>{}</DesiredFirstTrackNumberEnqueued>", desired_first_track_number_enqueued).as_str());
-        payload.push_str(format!("<EnqueueAsNext>{}</EnqueueAsNext>", enqueue_as_next).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&number_of_uris).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uris).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uris_meta_data).unwrap(),
+            serde_xml_rs::to_string(&container_uri).unwrap(),
+            serde_xml_rs::to_string(&container_meta_data).unwrap(),
+            serde_xml_rs::to_string(&desired_first_track_number_enqueued).unwrap(),
+            serde_xml_rs::to_string(&enqueue_as_next).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddMultipleURIsToQueueResult {
@@ -104,13 +105,13 @@ impl AVTransportService {
             desired_first_track_number_enqueued: u32,
             enqueue_as_next: bool
         ) -> Result<AddURIToQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<EnqueuedURI>{}</EnqueuedURI>", enqueued_uri).as_str());
-        payload.push_str(format!("<EnqueuedURIMetaData>{}</EnqueuedURIMetaData>", enqueued_urimeta_data).as_str());
-        payload.push_str(format!("<DesiredFirstTrackNumberEnqueued>{}</DesiredFirstTrackNumberEnqueued>", desired_first_track_number_enqueued).as_str());
-        payload.push_str(format!("<EnqueueAsNext>{}</EnqueueAsNext>", enqueue_as_next).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uri).unwrap(),
+            serde_xml_rs::to_string(&enqueued_urimeta_data).unwrap(),
+            serde_xml_rs::to_string(&desired_first_track_number_enqueued).unwrap(),
+            serde_xml_rs::to_string(&enqueue_as_next).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddURIToQueueResult {
@@ -146,14 +147,14 @@ impl AVTransportService {
             enqueued_urimeta_data: String,
             add_at_index: u32
         ) -> Result<AddURIToSavedQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<EnqueuedURI>{}</EnqueuedURI>", enqueued_uri).as_str());
-        payload.push_str(format!("<EnqueuedURIMetaData>{}</EnqueuedURIMetaData>", enqueued_urimeta_data).as_str());
-        payload.push_str(format!("<AddAtIndex>{}</AddAtIndex>", add_at_index).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uri).unwrap(),
+            serde_xml_rs::to_string(&enqueued_urimeta_data).unwrap(),
+            serde_xml_rs::to_string(&add_at_index).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddURIToSavedQueueResult {
@@ -174,9 +175,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -195,9 +196,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<BecomeCoordinatorOfStandaloneGroupResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(BecomeCoordinatorOfStandaloneGroupResult {
@@ -238,20 +239,20 @@ impl AVTransportService {
             current_queue_track_list: String,
             current_vlistate: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CurrentCoordinator>{}</CurrentCoordinator>", current_coordinator).as_str());
-        payload.push_str(format!("<CurrentGroupID>{}</CurrentGroupID>", current_group_id).as_str());
-        payload.push_str(format!("<OtherMembers>{}</OtherMembers>", other_members).as_str());
-        payload.push_str(format!("<TransportSettings>{}</TransportSettings>", transport_settings).as_str());
-        payload.push_str(format!("<CurrentURI>{}</CurrentURI>", current_uri).as_str());
-        payload.push_str(format!("<CurrentURIMetaData>{}</CurrentURIMetaData>", current_urimeta_data).as_str());
-        payload.push_str(format!("<SleepTimerState>{}</SleepTimerState>", sleep_timer_state).as_str());
-        payload.push_str(format!("<AlarmState>{}</AlarmState>", alarm_state).as_str());
-        payload.push_str(format!("<StreamRestartState>{}</StreamRestartState>", stream_restart_state).as_str());
-        payload.push_str(format!("<CurrentQueueTrackList>{}</CurrentQueueTrackList>", current_queue_track_list).as_str());
-        payload.push_str(format!("<CurrentVLIState>{}</CurrentVLIState>", current_vlistate).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&current_coordinator).unwrap(),
+            serde_xml_rs::to_string(&current_group_id).unwrap(),
+            serde_xml_rs::to_string(&other_members).unwrap(),
+            serde_xml_rs::to_string(&transport_settings).unwrap(),
+            serde_xml_rs::to_string(&current_uri).unwrap(),
+            serde_xml_rs::to_string(&current_urimeta_data).unwrap(),
+            serde_xml_rs::to_string(&sleep_timer_state).unwrap(),
+            serde_xml_rs::to_string(&alarm_state).unwrap(),
+            serde_xml_rs::to_string(&stream_restart_state).unwrap(),
+            serde_xml_rs::to_string(&current_queue_track_list).unwrap(),
+            serde_xml_rs::to_string(&current_vlistate).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -288,21 +289,21 @@ impl AVTransportService {
             current_source_state: String,
             resume_playback: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CurrentCoordinator>{}</CurrentCoordinator>", current_coordinator).as_str());
-        payload.push_str(format!("<CurrentGroupID>{}</CurrentGroupID>", current_group_id).as_str());
-        payload.push_str(format!("<OtherMembers>{}</OtherMembers>", other_members).as_str());
-        payload.push_str(format!("<CurrentURI>{}</CurrentURI>", current_uri).as_str());
-        payload.push_str(format!("<CurrentURIMetaData>{}</CurrentURIMetaData>", current_urimeta_data).as_str());
-        payload.push_str(format!("<SleepTimerState>{}</SleepTimerState>", sleep_timer_state).as_str());
-        payload.push_str(format!("<AlarmState>{}</AlarmState>", alarm_state).as_str());
-        payload.push_str(format!("<StreamRestartState>{}</StreamRestartState>", stream_restart_state).as_str());
-        payload.push_str(format!("<CurrentAVTTrackList>{}</CurrentAVTTrackList>", current_avttrack_list).as_str());
-        payload.push_str(format!("<CurrentQueueTrackList>{}</CurrentQueueTrackList>", current_queue_track_list).as_str());
-        payload.push_str(format!("<CurrentSourceState>{}</CurrentSourceState>", current_source_state).as_str());
-        payload.push_str(format!("<ResumePlayback>{}</ResumePlayback>", resume_playback).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&current_coordinator).unwrap(),
+            serde_xml_rs::to_string(&current_group_id).unwrap(),
+            serde_xml_rs::to_string(&other_members).unwrap(),
+            serde_xml_rs::to_string(&current_uri).unwrap(),
+            serde_xml_rs::to_string(&current_urimeta_data).unwrap(),
+            serde_xml_rs::to_string(&sleep_timer_state).unwrap(),
+            serde_xml_rs::to_string(&alarm_state).unwrap(),
+            serde_xml_rs::to_string(&stream_restart_state).unwrap(),
+            serde_xml_rs::to_string(&current_avttrack_list).unwrap(),
+            serde_xml_rs::to_string(&current_queue_track_list).unwrap(),
+            serde_xml_rs::to_string(&current_source_state).unwrap(),
+            serde_xml_rs::to_string(&resume_playback).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -323,13 +324,13 @@ impl AVTransportService {
             new_transport_settings: String,
             current_avtransport_uri: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CurrentCoordinator>{}</CurrentCoordinator>", current_coordinator).as_str());
-        payload.push_str(format!("<NewCoordinator>{}</NewCoordinator>", new_coordinator).as_str());
-        payload.push_str(format!("<NewTransportSettings>{}</NewTransportSettings>", new_transport_settings).as_str());
-        payload.push_str(format!("<CurrentAVTransportURI>{}</CurrentAVTransportURI>", current_avtransport_uri).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&current_coordinator).unwrap(),
+            serde_xml_rs::to_string(&new_coordinator).unwrap(),
+            serde_xml_rs::to_string(&new_transport_settings).unwrap(),
+            serde_xml_rs::to_string(&current_avtransport_uri).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -346,11 +347,11 @@ impl AVTransportService {
             new_transport_settings: String,
             current_avtransport_uri: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<NewTransportSettings>{}</NewTransportSettings>", new_transport_settings).as_str());
-        payload.push_str(format!("<CurrentAVTransportURI>{}</CurrentAVTransportURI>", current_avtransport_uri).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&new_transport_settings).unwrap(),
+            serde_xml_rs::to_string(&current_avtransport_uri).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -369,10 +370,10 @@ impl AVTransportService {
             instance_id: u32,
             new_sleep_timer_duration: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<NewSleepTimerDuration>{}</NewSleepTimerDuration>", new_sleep_timer_duration).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&new_sleep_timer_duration).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -397,12 +398,12 @@ impl AVTransportService {
             enqueued_uri: String,
             enqueued_urimeta_data: String
         ) -> Result<CreateSavedQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Title>{}</Title>", title).as_str());
-        payload.push_str(format!("<EnqueuedURI>{}</EnqueuedURI>", enqueued_uri).as_str());
-        payload.push_str(format!("<EnqueuedURIMetaData>{}</EnqueuedURIMetaData>", enqueued_urimeta_data).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&title).unwrap(),
+            serde_xml_rs::to_string(&enqueued_uri).unwrap(),
+            serde_xml_rs::to_string(&enqueued_urimeta_data).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(CreateSavedQueueResult {
@@ -433,11 +434,11 @@ impl AVTransportService {
             new_coordinator: String,
             rejoin_group: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<NewCoordinator>{}</NewCoordinator>", new_coordinator).as_str());
-        payload.push_str(format!("<RejoinGroup>{}</RejoinGroup>", rejoin_group).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&new_coordinator).unwrap(),
+            serde_xml_rs::to_string(&rejoin_group).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -450,9 +451,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -472,9 +473,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetCrossfadeModeResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetCrossfadeModeResult {
@@ -498,9 +499,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetCurrentTransportActionsResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetCurrentTransportActionsResult {
@@ -522,9 +523,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetDeviceCapabilitiesResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetDeviceCapabilitiesResult {
@@ -558,9 +559,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetMediaInfoResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetMediaInfoResult {
@@ -605,9 +606,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetPositionInfoResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetPositionInfoResult {
@@ -646,9 +647,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetRemainingSleepTimerDurationResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetRemainingSleepTimerDurationResult {
@@ -672,9 +673,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetRunningAlarmPropertiesResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetRunningAlarmPropertiesResult {
@@ -704,9 +705,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetTransportInfoResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetTransportInfoResult {
@@ -735,9 +736,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<GetTransportSettingsResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetTransportSettingsResult {
@@ -760,9 +761,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -777,10 +778,10 @@ impl AVTransportService {
             instance_id: u32,
             deleted_uri: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DeletedURI>{}</DeletedURI>", deleted_uri).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&deleted_uri).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -795,9 +796,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -814,10 +815,10 @@ impl AVTransportService {
             instance_id: u32,
             speed: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Speed>{}</Speed>", speed).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&speed).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -834,9 +835,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -853,9 +854,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -872,11 +873,11 @@ impl AVTransportService {
             object_id: String,
             update_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -900,12 +901,12 @@ impl AVTransportService {
             starting_index: u32,
             number_of_tracks: u32
         ) -> Result<RemoveTrackRangeFromQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<NumberOfTracks>{}</NumberOfTracks>", number_of_tracks).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&number_of_tracks).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(RemoveTrackRangeFromQueueResult {
@@ -930,13 +931,13 @@ impl AVTransportService {
             insert_before: u32,
             update_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<NumberOfTracks>{}</NumberOfTracks>", number_of_tracks).as_str());
-        payload.push_str(format!("<InsertBefore>{}</InsertBefore>", insert_before).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&number_of_tracks).unwrap(),
+            serde_xml_rs::to_string(&insert_before).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -962,13 +963,13 @@ impl AVTransportService {
             track_list: String,
             new_position_list: String
         ) -> Result<ReorderTracksInSavedQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<UpdateID>{}</UpdateID>", update_id).as_str());
-        payload.push_str(format!("<TrackList>{}</TrackList>", track_list).as_str());
-        payload.push_str(format!("<NewPositionList>{}</NewPositionList>", new_position_list).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&update_id).unwrap(),
+            serde_xml_rs::to_string(&track_list).unwrap(),
+            serde_xml_rs::to_string(&new_position_list).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(ReorderTracksInSavedQueueResult {
@@ -1005,17 +1006,17 @@ impl AVTransportService {
             volume: u16,
             include_linked_zones: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<AlarmID>{}</AlarmID>", alarm_id).as_str());
-        payload.push_str(format!("<LoggedStartTime>{}</LoggedStartTime>", logged_start_time).as_str());
-        payload.push_str(format!("<Duration>{}</Duration>", duration).as_str());
-        payload.push_str(format!("<ProgramURI>{}</ProgramURI>", program_uri).as_str());
-        payload.push_str(format!("<ProgramMetaData>{}</ProgramMetaData>", program_meta_data).as_str());
-        payload.push_str(format!("<PlayMode>{}</PlayMode>", play_mode).as_str());
-        payload.push_str(format!("<Volume>{}</Volume>", volume).as_str());
-        payload.push_str(format!("<IncludeLinkedZones>{}</IncludeLinkedZones>", include_linked_zones).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&alarm_id).unwrap(),
+            serde_xml_rs::to_string(&logged_start_time).unwrap(),
+            serde_xml_rs::to_string(&duration).unwrap(),
+            serde_xml_rs::to_string(&program_uri).unwrap(),
+            serde_xml_rs::to_string(&program_meta_data).unwrap(),
+            serde_xml_rs::to_string(&play_mode).unwrap(),
+            serde_xml_rs::to_string(&volume).unwrap(),
+            serde_xml_rs::to_string(&include_linked_zones).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1039,11 +1040,11 @@ impl AVTransportService {
             title: String,
             object_id: String
         ) -> Result<SaveQueueResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Title>{}</Title>", title).as_str());
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&title).unwrap(),
+            serde_xml_rs::to_string(&object_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(SaveQueueResult {
@@ -1068,11 +1069,11 @@ impl AVTransportService {
             unit: String,
             target: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Unit>{}</Unit>", unit).as_str());
-        payload.push_str(format!("<Target>{}</Target>", target).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&unit).unwrap(),
+            serde_xml_rs::to_string(&target).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1093,11 +1094,11 @@ impl AVTransportService {
             current_uri: String,
             current_urimeta_data: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CurrentURI>{}</CurrentURI>", current_uri).as_str());
-        payload.push_str(format!("<CurrentURIMetaData>{}</CurrentURIMetaData>", current_urimeta_data).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&current_uri).unwrap(),
+            serde_xml_rs::to_string(&current_urimeta_data).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1116,10 +1117,10 @@ impl AVTransportService {
             instance_id: u32,
             crossfade_mode: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CrossfadeMode>{}</CrossfadeMode>", crossfade_mode).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&crossfade_mode).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1136,11 +1137,11 @@ impl AVTransportService {
             next_uri: String,
             next_urimeta_data: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<NextURI>{}</NextURI>", next_uri).as_str());
-        payload.push_str(format!("<NextURIMetaData>{}</NextURIMetaData>", next_urimeta_data).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&next_uri).unwrap(),
+            serde_xml_rs::to_string(&next_urimeta_data).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1159,10 +1160,10 @@ impl AVTransportService {
             instance_id: u32,
             new_play_mode: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<NewPlayMode>{}</NewPlayMode>", new_play_mode).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&new_play_mode).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1179,10 +1180,10 @@ impl AVTransportService {
             instance_id: u32,
             duration: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Duration>{}</Duration>", duration).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&duration).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1205,14 +1206,14 @@ impl AVTransportService {
             include_linked_zones: bool,
             reset_volume_after: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<ProgramURI>{}</ProgramURI>", program_uri).as_str());
-        payload.push_str(format!("<ProgramMetaData>{}</ProgramMetaData>", program_meta_data).as_str());
-        payload.push_str(format!("<Volume>{}</Volume>", volume).as_str());
-        payload.push_str(format!("<IncludeLinkedZones>{}</IncludeLinkedZones>", include_linked_zones).as_str());
-        payload.push_str(format!("<ResetVolumeAfter>{}</ResetVolumeAfter>", reset_volume_after).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&program_uri).unwrap(),
+            serde_xml_rs::to_string(&program_meta_data).unwrap(),
+            serde_xml_rs::to_string(&volume).unwrap(),
+            serde_xml_rs::to_string(&include_linked_zones).unwrap(),
+            serde_xml_rs::to_string(&reset_volume_after).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -1227,9 +1228,9 @@ impl AVTransportService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

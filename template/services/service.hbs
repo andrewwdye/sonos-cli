@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos {{serviceName}}
 ///
@@ -57,11 +58,11 @@ impl {{serviceName}} {
             {{/each}}
         ) -> Result<{{#if outputs}}{{name}}Result{{else}}(){{/if}}, Error> {
         {{#if inputs}}
-        // TODO: use xml helper
-        let mut payload = String::new();
-        {{#each inputs}}
-        payload.push_str(format!("<{{name}}>{}</{{name}}>", {{#if (are_equal name 'Type')}}type_t{{else}}{{snake name}}{{/if}}).as_str());
-        {{/each}}
+        let payload = [
+            {{#each inputs}}
+            serde_xml_rs::to_string(&{{#if (are_equal name 'Type')}}type_t{{else}}{{snake name}}{{/if}}).unwrap(),
+            {{/each}}
+        ].concat();
         {{else}}
         let payload = String::new();
         {{/if}}

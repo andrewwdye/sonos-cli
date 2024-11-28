@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos VirtualLineInService
 ///
@@ -31,9 +32,9 @@ impl VirtualLineInService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -46,9 +47,9 @@ impl VirtualLineInService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -63,10 +64,10 @@ impl VirtualLineInService {
             instance_id: u32,
             speed: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<Speed>{}</Speed>", speed).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&speed).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -79,9 +80,9 @@ impl VirtualLineInService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -96,10 +97,10 @@ impl VirtualLineInService {
             instance_id: u32,
             desired_volume: u16
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<DesiredVolume>{}</DesiredVolume>", desired_volume).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&desired_volume).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -117,10 +118,10 @@ impl VirtualLineInService {
             instance_id: u32,
             coordinator_id: String
         ) -> Result<StartTransmissionResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CoordinatorID>{}</CoordinatorID>", coordinator_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&coordinator_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(StartTransmissionResult {
@@ -137,9 +138,9 @@ impl VirtualLineInService {
             &self,
             instance_id: u32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -154,10 +155,10 @@ impl VirtualLineInService {
             instance_id: u32,
             coordinator_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<InstanceID>{}</InstanceID>", instance_id).as_str());
-        payload.push_str(format!("<CoordinatorID>{}</CoordinatorID>", coordinator_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&instance_id).unwrap(),
+            serde_xml_rs::to_string(&coordinator_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

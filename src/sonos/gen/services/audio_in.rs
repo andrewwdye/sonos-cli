@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos AudioInService
 ///
@@ -70,9 +71,9 @@ impl AudioInService {
             &self,
             object_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -87,10 +88,10 @@ impl AudioInService {
             desired_name: String,
             desired_icon: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredName>{}</DesiredName>", desired_name).as_str());
-        payload.push_str(format!("<DesiredIcon>{}</DesiredIcon>", desired_icon).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_name).unwrap(),
+            serde_xml_rs::to_string(&desired_icon).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -105,10 +106,10 @@ impl AudioInService {
             desired_left_line_in_level: i32,
             desired_right_line_in_level: i32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredLeftLineInLevel>{}</DesiredLeftLineInLevel>", desired_left_line_in_level).as_str());
-        payload.push_str(format!("<DesiredRightLineInLevel>{}</DesiredRightLineInLevel>", desired_right_line_in_level).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_left_line_in_level).unwrap(),
+            serde_xml_rs::to_string(&desired_right_line_in_level).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -124,9 +125,9 @@ impl AudioInService {
             &self,
             coordinator_id: String
         ) -> Result<StartTransmissionToGroupResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<CoordinatorID>{}</CoordinatorID>", coordinator_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&coordinator_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(StartTransmissionToGroupResult {
@@ -143,9 +144,9 @@ impl AudioInService {
             &self,
             coordinator_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<CoordinatorID>{}</CoordinatorID>", coordinator_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&coordinator_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos ContentDirectoryService
 ///
@@ -52,14 +53,14 @@ impl ContentDirectoryService {
             requested_count: u32,
             sort_criteria: String
         ) -> Result<BrowseResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<BrowseFlag>{}</BrowseFlag>", browse_flag).as_str());
-        payload.push_str(format!("<Filter>{}</Filter>", filter).as_str());
-        payload.push_str(format!("<StartingIndex>{}</StartingIndex>", starting_index).as_str());
-        payload.push_str(format!("<RequestedCount>{}</RequestedCount>", requested_count).as_str());
-        payload.push_str(format!("<SortCriteria>{}</SortCriteria>", sort_criteria).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&browse_flag).unwrap(),
+            serde_xml_rs::to_string(&filter).unwrap(),
+            serde_xml_rs::to_string(&starting_index).unwrap(),
+            serde_xml_rs::to_string(&requested_count).unwrap(),
+            serde_xml_rs::to_string(&sort_criteria).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(BrowseResult {
@@ -88,10 +89,10 @@ impl ContentDirectoryService {
             container_id: String,
             elements: String
         ) -> Result<CreateObjectResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ContainerID>{}</ContainerID>", container_id).as_str());
-        payload.push_str(format!("<Elements>{}</Elements>", elements).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&container_id).unwrap(),
+            serde_xml_rs::to_string(&elements).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(CreateObjectResult {
@@ -110,9 +111,9 @@ impl ContentDirectoryService {
             &self,
             object_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -131,10 +132,10 @@ impl ContentDirectoryService {
             object_id: String,
             prefix: String
         ) -> Result<FindPrefixResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<Prefix>{}</Prefix>", prefix).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&prefix).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(FindPrefixResult {
@@ -176,9 +177,9 @@ impl ContentDirectoryService {
             &self,
             object_id: String
         ) -> Result<GetAllPrefixLocationsResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetAllPrefixLocationsResult {
@@ -297,9 +298,9 @@ impl ContentDirectoryService {
             &self,
             album_artist_display_option: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<AlbumArtistDisplayOption>{}</AlbumArtistDisplayOption>", album_artist_display_option).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&album_artist_display_option).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -312,9 +313,9 @@ impl ContentDirectoryService {
             &self,
             sort_order: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<SortOrder>{}</SortOrder>", sort_order).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&sort_order).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -327,9 +328,9 @@ impl ContentDirectoryService {
             &self,
             browseable: bool
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<Browseable>{}</Browseable>", browseable).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&browseable).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -346,11 +347,11 @@ impl ContentDirectoryService {
             current_tag_value: String,
             new_tag_value: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ObjectID>{}</ObjectID>", object_id).as_str());
-        payload.push_str(format!("<CurrentTagValue>{}</CurrentTagValue>", current_tag_value).as_str());
-        payload.push_str(format!("<NewTagValue>{}</NewTagValue>", new_tag_value).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&object_id).unwrap(),
+            serde_xml_rs::to_string(&current_tag_value).unwrap(),
+            serde_xml_rs::to_string(&new_tag_value).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

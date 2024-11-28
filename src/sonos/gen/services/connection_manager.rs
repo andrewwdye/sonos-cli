@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos ConnectionManagerService
 ///
@@ -57,9 +58,9 @@ impl ConnectionManagerService {
             &self,
             connection_id: i32
         ) -> Result<GetCurrentConnectionInfoResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ConnectionID>{}</ConnectionID>", connection_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&connection_id).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetCurrentConnectionInfoResult {

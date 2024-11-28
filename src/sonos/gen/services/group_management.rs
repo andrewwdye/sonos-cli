@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos GroupManagementService
 ///
@@ -41,10 +42,10 @@ impl GroupManagementService {
             member_id: String,
             boot_seq: u32
         ) -> Result<AddMemberResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<MemberID>{}</MemberID>", member_id).as_str());
-        payload.push_str(format!("<BootSeq>{}</BootSeq>", boot_seq).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&member_id).unwrap(),
+            serde_xml_rs::to_string(&boot_seq).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(AddMemberResult {
@@ -69,9 +70,9 @@ impl GroupManagementService {
             &self,
             member_id: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<MemberID>{}</MemberID>", member_id).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&member_id).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -86,10 +87,10 @@ impl GroupManagementService {
             member_id: String,
             result_code: i32
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<MemberID>{}</MemberID>", member_id).as_str());
-        payload.push_str(format!("<ResultCode>{}</ResultCode>", result_code).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&member_id).unwrap(),
+            serde_xml_rs::to_string(&result_code).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }
@@ -102,9 +103,9 @@ impl GroupManagementService {
             &self,
             desired_source_area_ids: String
         ) -> Result<(), Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<DesiredSourceAreaIds>{}</DesiredSourceAreaIds>", desired_source_area_ids).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&desired_source_area_ids).unwrap(),
+        ].concat();
         self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         Ok(())
     }

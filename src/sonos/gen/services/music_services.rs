@@ -3,6 +3,7 @@
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
 use rupnp::ssdp::URN;use crate::sonos::gen::errors::Error;
+use serde_xml_rs;
 
 /// Sonos MusicServicesService
 ///
@@ -37,10 +38,10 @@ impl MusicServicesService {
             service_id: u32,
             username: String
         ) -> Result<GetSessionIdResult, Error> {
-        // TODO: use xml helper
-        let mut payload = String::new();
-        payload.push_str(format!("<ServiceId>{}</ServiceId>", service_id).as_str());
-        payload.push_str(format!("<Username>{}</Username>", username).as_str());
+        let payload = [
+            serde_xml_rs::to_string(&service_id).unwrap(),
+            serde_xml_rs::to_string(&username).unwrap(),
+        ].concat();
         let response = self.service.action(&self.url, "SetTimeNow", payload.as_str()).await?;
         // TODO: map parse errors
         Ok(GetSessionIdResult {
