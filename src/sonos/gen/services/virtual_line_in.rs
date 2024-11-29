@@ -2,7 +2,6 @@
 
 use rupnp::{Device, Service};
 use rupnp::http::Uri;
-use rupnp::ssdp::URN;
 use serde_xml_rs;
 use std::net::IpAddr;
 use crate::sonos::gen::errors::Error;
@@ -17,16 +16,16 @@ pub struct VirtualLineInService {
 
 impl VirtualLineInService {
     /// Create a new VirtualLineInService instance from an existing UPnP device.
-    async fn from_device(device: Device) -> Result<Self, Error> {
-        let urn = "urn:schemas-upnp-org:service:urn:schemas-upnp-org:service:VirtualLineIn:1:1".parse::<URN>().unwrap();
+    pub async fn from_device(device: Device) -> Result<Self, Error> {
+        let urn = "urn:schemas-upnp-org:service:VirtualLineIn:1".parse().unwrap();
         let service = device.find_service(&urn)
             .ok_or_else(|| Error::ServiceNotFound("VirtualLineInService".to_string()))?;
         Ok(Self{ service: service.clone(), url: device.url().clone() })
     }
 
     /// Create a new VirtualLineInService instance from an IP address.
-    async fn from_ip(ip: IpAddr) -> Result<Self, Error> {
-        let url = Uri::from_str(format!("http://{ip}:1400/xml/device_description.xml").as_str()).unwrap();
+    pub async fn from_ip(ip: IpAddr) -> Result<Self, Error> {
+        let url = format!("http://{ip}:1400/xml/device_description.xml").parse().unwrap();
         let device = Device::from_url(url).await?;
         Self::from_device(device).await
     }
