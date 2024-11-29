@@ -9,7 +9,7 @@ mod commands;
 #[command(version, about, long_about = None)]
 struct Cli {
     #[command(subcommand)]
-    command: Option<Commands>,
+    command: Commands,
 
     #[command(flatten)]
     verbose: Verbosity,
@@ -24,23 +24,30 @@ enum Commands {
     Speaker(commands::speaker::Speaker),
 }
 
-#[tokio::main]
-async fn main() -> ExitCode {
+async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
     env_logger::Builder::new()
         .filter_level(cli.verbose.log_level_filter())
         .init();
     match cli.command {
-        Some(Commands::Discover(c)) => {
+        Commands::Discover(c) => {
             c.discover().await;
+            Ok(())
         }
-        Some(Commands::Speaker(s)) => {
-            s.state().await;
-        }
-        None => {
-            println!("No command provided");
-            return ExitCode::FAILURE;
+        Commands::Speaker(s) => {
+            s.state().await?;
+            Ok(())
         }
     }
-    ExitCode::SUCCESS
+}
+
+#[tokio::main]
+async fn main() -> ExitCode {
+    match run().await {
+        Ok(_) => ExitCode::SUCCESS,
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            ExitCode::FAILURE
+        }
+    }
 }

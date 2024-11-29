@@ -18,8 +18,13 @@ enum Commands {
 }
 
 impl Speaker {
-    pub async fn state(&self) {
-        println!("Speaker state for {}", self.ip_address);
-        let s = AVTransportService::from_ip(self.ip_address).await;
+    pub async fn state(&self) -> Result<(), Box<dyn std::error::Error>> {
+        let service = AVTransportService::from_ip(self.ip_address).await?;
+
+        println!("Device capabilities: {:?}", service.get_device_capabilities(0).await?);
+        println!("Transport info: {:?}", service.get_transport_info(0).await?);
+        println!("Media info: {:?}", service.get_media_info(0).await?);
+
+        Ok(())
     }
 }
